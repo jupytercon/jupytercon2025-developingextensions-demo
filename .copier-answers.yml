@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.4.0-14-ga55376f
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: matt.fisher@berkeley.edu
+author_name: Matt
+has_binder: false
+has_settings: false
+kind: frontend-and-server
+labextension_name: jupytercon2025-extension-workshop
+project_short_description: A JupyterLab extension that displays a random image and
+    caption.
+python_name: jupytercon2025_extension_workshop
+repository: https://github.com/mfisher87/jupytercon2025-extension-workshop
+test: true
+

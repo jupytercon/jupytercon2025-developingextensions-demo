@@ -1,0 +1,7 @@
+{
+  "ServerApp": {
+    "jpserver_extensions": {
+      "jupytercon2025_extension_workshop": true
+    }
+  }
+}
