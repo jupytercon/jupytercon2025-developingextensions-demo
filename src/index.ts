@@ -4,6 +4,7 @@ import {
 } from '@jupyterlab/application';
 
 import { requestAPI } from './request';
+import { ImageCaptionMainAreaWidget } from './widget';
 
 /**
  * Initialization data for the jupytercon2025-extension-workshop extension.
@@ -24,6 +25,19 @@ const plugin: JupyterFrontEndPlugin<void> = {
           `The jupytercon2025_extension_workshop server extension appears to be missing.\n${reason}`
         );
       });
+
+    //Register a new command:
+    const command_id = 'image-caption:open';
+    app.commands.addCommand(command_id, {
+      execute: () => {
+        // When the command is executed, create a new instance of our widget
+        const widget = new ImageCaptionMainAreaWidget();
+
+        // Then add it to the main area:
+        app.shell.add(widget, 'main');
+      },
+      label: 'View a random image & caption'
+    });
   }
 };
 
