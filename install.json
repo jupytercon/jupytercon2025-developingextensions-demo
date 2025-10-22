@@ -1,0 +1,5 @@
+{
+  "packageManager": "python",
+  "packageName": "jupytercon2025_extension_workshop",
+  "uninstallInstructions": "Use your Python package manager (pip, conda, etc.) to uninstall the package jupytercon2025_extension_workshop"
+}
