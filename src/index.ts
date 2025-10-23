@@ -1,8 +1,12 @@
 import {
+  ILayoutRestorer,
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import { ICommandPalette } from '@jupyterlab/apputils';
+import {
+  ICommandPalette,
+  WidgetTracker
+} from '@jupyterlab/apputils';
 import { ILauncher } from '@jupyterlab/launcher';
 import { imageIcon } from '@jupyterlab/ui-components';
 
@@ -17,12 +21,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
   description: 'A JupyterLab extension that displays a random image and caption.',
   autoStart: true,
   requires: [ICommandPalette, ILauncher],  // dependencies of our extension
+  optional: [ILayoutRestorer],
   activate: (
     app: JupyterFrontEnd,
     // The activation method receives dependencies in the order they are specified in
     // the "requires" parameter above:
     palette: ICommandPalette,
-    launcher: ILauncher
+    launcher: ILauncher,
+    restorer: ILayoutRestorer | null
   ) => {
     console.log('JupyterLab extension jupytercon2025-extension-workshop is activated!');
 
@@ -36,12 +42,29 @@ const plugin: JupyterFrontEndPlugin<void> = {
         );
       });
 
+    // Track widget state
+    const tracker = new WidgetTracker<ImageCaptionMainAreaWidget>({
+      namespace: 'jupytercon2025-extension-workshop'
+    });
+
     //Register a new command:
     const command_id = 'image-caption:open';
     app.commands.addCommand(command_id, {
-      execute: () => {
+      execute: (args?: { id?: string }) => {
         // When the command is executed, create a new instance of our widget
         const widget = new ImageCaptionMainAreaWidget();
+
+        // Use provided ID or generate a new one
+        // During restoration, the args will contain the saved widget ID
+        if (args && args.id) {
+          widget.id = args.id;
+        } else {
+          widget.id = `image-caption-${crypto.randomUUID()}`;
+        }
+
+        if (!tracker.has(widget)) {
+          tracker.add(widget);
+        }
 
         // Then add it to the main area:
         app.shell.add(widget, 'main');
@@ -53,6 +76,15 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     palette.addItem({ command: command_id, category: 'Tutorial' });
     launcher.add({ command: command_id });
+
+    // Restore widget state
+    if (restorer) {
+      restorer.restore(tracker, {
+        command: command_id,
+        name: widget => widget.id,
+        args: widget => ({ id: widget.id })
+      });
+    }
   }
 };
 
