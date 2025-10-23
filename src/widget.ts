@@ -1,7 +1,11 @@
 import { Widget } from '@lumino/widgets';
-import { MainAreaWidget } from '@jupyterlab/apputils';
+import {
+  MainAreaWidget,
+  ToolbarButton,
+} from '@jupyterlab/apputils';
 import {
   imageIcon,
+  refreshIcon,
 } from '@jupyterlab/ui-components';
 
 import { requestAPI } from './request';
@@ -60,5 +64,15 @@ export class ImageCaptionMainAreaWidget extends MainAreaWidget<ImageCaptionWidge
     this.title.label = 'Random image with caption';
     this.title.caption = this.title.label;
     this.title.icon = imageIcon;
+
+    // Add a refresh button to the toolbar
+    const refreshButton = new ToolbarButton({
+      icon: refreshIcon,
+      tooltip: 'Refresh image',
+      onClick: () => {
+        widget.load_image();
+      }
+    });
+    this.toolbar.addItem('refresh', refreshButton);
   }
 }
