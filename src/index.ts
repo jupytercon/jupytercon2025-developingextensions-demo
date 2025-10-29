@@ -51,7 +51,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     //Register a new command:
     const command_id = 'image-caption:open';
     app.commands.addCommand(command_id, {
-      execute: (args?: any) => {
+      execute: (args?: { id?: string }) => {
         // When the command is executed, create a new instance of our widget
         const widget = new ImageCaptionMainAreaWidget();
 
