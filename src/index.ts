@@ -51,13 +51,17 @@ const plugin: JupyterFrontEndPlugin<void> = {
     //Register a new command:
     const command_id = 'image-caption:open';
     app.commands.addCommand(command_id, {
-      execute: (args: any) => {
+      execute: (args?: any) => {
         // When the command is executed, create a new instance of our widget
         const widget = new ImageCaptionMainAreaWidget();
 
-        // Use provided ID or generate a new one with a letter prefix for valid DOM ID
+        // Use provided ID or generate a new one
         // During restoration, the args will contain the saved widget ID
-        widget.id = args?.id ?? `w-${crypto.randomUUID()}`;
+        if (args && args.id) {
+          widget.id = args.id;
+        } else {
+          widget.id = `image-caption-${crypto.randomUUID()}`;
+        }
 
         if (!tracker.has(widget)) {
           tracker.add(widget);
